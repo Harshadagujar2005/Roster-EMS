@@ -1,0 +1,409 @@
+/* =========================================================
+   Roster — Employee Management System
+   Global design tokens & primitives.
+
+   Concept: a personnel ledger / badge-file system. Tables read
+   like index-card registers, each row carries a small coloured
+   "tab" keyed to department (the way a paper filing system uses
+   coloured folder tabs), and data-heavy values (ids, dates) are
+   set in a mono face the way a registry stamps them.
+   ========================================================= */
+
+:root {
+  /* ---- colour ---- */
+  --color-paper: #f1efe8;
+  --color-paper-raised: #fffdf9;
+  --color-ink: #1f231f;
+  --color-ink-soft: #565f57;
+  --color-ink-faint: #8a9088;
+
+  --color-primary: #2f5233;
+  --color-primary-dark: #203a25;
+  --color-primary-soft: #e3ebe1;
+
+  --color-accent: #b9790f;
+  --color-accent-soft: #f5e8cf;
+
+  --color-danger: #ad2b1e;
+  --color-danger-soft: #fbe7e3;
+
+  --color-success: #2e7d52;
+  --color-success-soft: #e4f1e8;
+
+  --color-border: #ddd9cc;
+  --color-border-strong: #bdb8a7;
+
+  /* department tab palette — cycled deterministically by name */
+  --tab-0: #2f5233;
+  --tab-1: #8a4b2e;
+  --tab-2: #3a5a78;
+  --tab-3: #6b4d7a;
+  --tab-4: #a8631a;
+  --tab-5: #3f6f6e;
+  --tab-6: #5b5b95;
+  --tab-7: #a23e48;
+
+  /* ---- type ---- */
+  --font-display: 'Fraunces', 'Iowan Old Style', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+  /* ---- layout ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 1px 2px rgba(31, 35, 31, 0.04), 0 6px 20px rgba(31, 35, 31, 0.06);
+  --shadow-pop: 0 12px 32px rgba(31, 35, 31, 0.16);
+  --nav-width: 230px;
+  --max-content: 1180px;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent 240px);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.15rem; }
+
+p { margin: 0; }
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+/* visible keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------
+   Layout shell
+   --------------------------------------------------------- */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 32px 28px 56px;
+}
+
+@media (max-width: 860px) {
+  .app-content {
+    padding: 76px 18px 48px;
+  }
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.page-header .eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+.page-header p.lede {
+  margin-top: 6px;
+  color: var(--color-ink-soft);
+  max-width: 56ch;
+}
+
+/* ---------------------------------------------------------
+   Buttons
+   --------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+
+.btn-secondary {
+  background: var(--color-paper-raised);
+  border-color: var(--color-border-strong);
+  color: var(--color-ink);
+}
+.btn-secondary:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+
+.btn-danger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  border-color: transparent;
+}
+.btn-danger:hover:not(:disabled) { background: var(--color-danger); color: #fff; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink-soft);
+}
+.btn-ghost:hover:not(:disabled) { color: var(--color-ink); background: rgba(0,0,0,0.04); }
+
+.btn-block { width: 100%; }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+
+/* ---------------------------------------------------------
+   Cards & surfaces
+   --------------------------------------------------------- */
+
+.card {
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.card-pad { padding: 24px; }
+
+/* ---------------------------------------------------------
+   Forms
+   --------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.field .hint {
+  font-size: 12px;
+  color: var(--color-ink-faint);
+}
+
+.field input,
+.field select {
+  background: #fff;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-ink);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.field input.has-error,
+.field select.has-error {
+  border-color: var(--color-danger);
+}
+
+.field input.has-error:focus,
+.field select.has-error:focus {
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
+}
+
+.field .error-text {
+  font-size: 12.5px;
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 20px;
+}
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ---------------------------------------------------------
+   Badges / department tabs
+   --------------------------------------------------------- */
+
+.dept-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-border);
+  color: var(--color-ink-soft);
+}
+
+.dept-badge .swatch {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------
+   Banners (inline alerts)
+   --------------------------------------------------------- */
+
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+}
+
+.banner-error {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  border-color: rgba(173, 43, 30, 0.18);
+}
+
+.banner-success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  border-color: rgba(46, 125, 82, 0.18);
+}
+
+.banner-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ---------------------------------------------------------
+   Utility
+   --------------------------------------------------------- */
+
+.text-muted { color: var(--color-ink-soft); }
+.text-faint { color: var(--color-ink-faint); }
+.mono { font-family: var(--font-mono); }
+.stack { display: flex; flex-direction: column; }
+.row { display: flex; align-items: center; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.space-between { justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}

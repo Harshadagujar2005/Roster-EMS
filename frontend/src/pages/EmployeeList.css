@@ -1,0 +1,38 @@
+.employee-toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.employee-toolbar .field {
+  margin-bottom: 0;
+}
+
+.employee-search-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.employee-dept-field {
+  min-width: 200px;
+}
+
+.employee-clear-btn {
+  align-self: flex-end;
+  margin-bottom: 1px;
+}
+
+@media (max-width: 640px) {
+  .employee-toolbar {
+    flex-direction: column;
+  }
+  .employee-search-field,
+  .employee-dept-field {
+    width: 100%;
+  }
+  .employee-clear-btn {
+    align-self: flex-start;
+  }
+}
