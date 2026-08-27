@@ -56,7 +56,7 @@ Open `backend/.env` and set your MongoDB URI:
 PORT=5000
 NODE_ENV=development
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ems?retryWrites=true&w=majority
-JWT_SECRET=mysupersecretkey123
+JWT_SECRET=JWT_SECRET=your_secret_key_here
 JWT_EXPIRES_IN=7d
 CLIENT_ORIGIN=*
 ```
